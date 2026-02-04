@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/lib/api";
 import { Card } from "../card";
-import { CardInfo } from "@/types/card";
+import { CardInfo, CardMovieInfo, CardTvShowInfo } from "@/types/card";
 import { useQuery } from "@tanstack/react-query";
 
 export function Library() {
@@ -11,40 +11,82 @@ export function Library() {
   });
 
   if (isLoading) {
-    return <p className="text-white">Loading library...</p>;
+    return (
+      <p className="text-white text-center mt-20 font-medium text-lg">
+        Loading library...
+      </p>
+    );
   }
 
   if (isError || !data) {
-    return <p className="text-white">Failed to load library</p>;
-  }
-
-  if (data.length === 0) {
     return (
-      <p className="text-white">Your movie and TV show library is empty</p>
+      <p className="text-white text-center mt-20 font-medium text-lg">
+        Failed to load library...
+      </p>
     );
   }
 
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-4 mb-8">
+    <>
       {data.length === 0 ? (
-        <p>Your movie and TV show library is empty</p>
+        <p className="font-medium text-lg text-white text-center mt-20">
+          Your movie and TV show library is empty...
+        </p>
       ) : (
-        data.map((card) => <Card key={card.id} card={card} />)
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-4 mb-8">
+          {data.map((card) => {
+            if (card.type === "movie") {
+              return (
+                <Card
+                  key={`movie-${card.id}`}
+                  type="movie"
+                  favorite={card.favorite}
+                  name={card.originalTitle}
+                  date={card.releaseDate}
+                  overview={card.overview}
+                  voteAverage={card.voteAverage}
+                  posterImg={card.posterPath}
+                  genres={card.genres}
+                />
+              );
+            }
+
+            return (
+              <Card
+                key={`tvshow-${card.id}`}
+                type="tvshow"
+                favorite={card.favorite}
+                name={card.originalName}
+                date={card.firstAirDate}
+                overview={card.overview}
+                voteAverage={card.voteAverage}
+                posterImg={card.posterImage}
+                genres={card.genres}
+              />
+            );
+          })}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
 async function fetchLibrary(): Promise<CardInfo[]> {
   const [movies, tvshows] = await Promise.all([
-    api.get<CardInfo[]>("/movie/searchAllMovies"),
-    api.get<CardInfo[]>("/tvshow/searchAllTvShows"),
+    api.get<CardMovieInfo[]>("/movie/searchAllMovies"),
+    api.get<CardTvShowInfo[]>("/tvshow/searchAllTvShows"),
   ]);
 
   console.log(tvshows.data);
 
   return [
-    ...movies.data.map((movie) => ({ ...movie, type: "movie" as const })),
-    ...tvshows.data.map((tvshow) => ({ ...tvshow, type: "tvshow" as const })),
+    ...movies.data.map((movie) => ({
+      ...movie,
+      type: "movie" as const,
+    })),
+    ...tvshows.data.map((tvshow) => ({
+      ...tvshow,
+      type: "tvshow" as const,
+    })),
   ];
 }
