@@ -1,7 +1,10 @@
-import { CardInfo, GenreInfo, MediaType } from "@/types/card";
+import { api } from "@/lib/api";
+import { GenreInfo, MediaType } from "@/types/card";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Heart, Star, Trash2 } from "lucide-react";
 
-interface Card {
+interface CardProps {
+  id: number;
   favorite: boolean;
   name: string;
   date: string;
@@ -13,6 +16,7 @@ interface Card {
 }
 
 export function Card({
+  id,
   favorite,
   name,
   date,
@@ -21,7 +25,46 @@ export function Card({
   posterImg,
   genres,
   type,
-}: Card) {
+}: CardProps) {
+  const queryClient = useQueryClient();
+
+  const toggleFavoriteMutation = useMutation({
+    mutationFn: (nextFavorite: boolean) =>
+      api.post(`${type}/favorite`, {
+        id: id,
+        favorite: nextFavorite,
+      }),
+
+    onError: (error) => {
+      console.log("Error:", error);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["library"],
+      });
+    },
+  });
+
+  const handleDeleteMutation = useMutation({
+    mutationFn: () =>
+      api.delete(`${type}/remove`, {
+        params: { id: id },
+      }),
+
+    onError: (error) => {
+      setTimeout(() => {
+        handleDeleteMutation.reset();
+      }, 3000);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["library"],
+      });
+    },
+  });
+
   return (
     <div className="bg-gray-900 rounded-lg group overflow-hidden hover:scale-105 duration-200">
       <div
@@ -76,12 +119,29 @@ export function Card({
         </div>
 
         <div className="w-full flex items-center justify-center gap-2">
-          <button className="flex flex-1 items-center justify-center hover:bg-red-600 hover:text-white h-8 hover:rounded-lg">
-            <Heart className="h-4 w-4" />
+          <button
+            onClick={() => toggleFavoriteMutation.mutate(!favorite)}
+            disabled={toggleFavoriteMutation.isPending}
+            className={`${!favorite ? "hover:text-white" : ""} flex flex-1 items-center justify-center hover:bg-red-600 h-8 hover:rounded-lg disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <Heart
+              className={`${favorite ? "fill-red-500 text-red-500" : ""}  h-4 w-4`}
+            />
           </button>
-          <button className="flex flex-1 items-center justify-center hover:bg-red-600 hover:text-white h-8 hover:rounded-lg">
+
+          <button
+            onClick={() => handleDeleteMutation.mutate()}
+            disabled={handleDeleteMutation.isPending}
+            className="flex flex-1 items-center justify-center hover:bg-red-600 hover:text-white h-8 hover:rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <Trash2 className="h-4 w-4" />
           </button>
+
+          {handleDeleteMutation.isError && (
+            <span className="mt-1 text-xs text-red-500">
+              Failed to delete...
+            </span>
+          )}
         </div>
       </div>
     </div>

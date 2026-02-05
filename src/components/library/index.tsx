@@ -39,6 +39,7 @@ export function Library() {
               return (
                 <Card
                   key={`movie-${card.id}`}
+                  id={card.id}
                   type="movie"
                   favorite={card.favorite}
                   name={card.originalTitle}
@@ -54,6 +55,7 @@ export function Library() {
             return (
               <Card
                 key={`tvshow-${card.id}`}
+                id={card.id}
                 type="tvshow"
                 favorite={card.favorite}
                 name={card.originalName}
@@ -76,8 +78,6 @@ async function fetchLibrary(): Promise<CardInfo[]> {
     api.get<CardMovieInfo[]>("/movie/searchAllMovies"),
     api.get<CardTvShowInfo[]>("/tvshow/searchAllTvShows"),
   ]);
-
-  console.log(tvshows.data);
 
   return [
     ...movies.data.map((movie) => ({
