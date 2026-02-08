@@ -1,8 +1,8 @@
 "use client";
-import { api } from "@/lib/api";
 import { Card } from "../card";
-import { CardInfo, CardMovieInfo, CardTvShowInfo } from "@/types/card";
+import { CardInfo } from "@/types/card";
 import { useQuery } from "@tanstack/react-query";
+import { fetchLibrary } from "@/lib/library";
 
 export function Library() {
   const { data, isLoading, isError } = useQuery<CardInfo[]>({
@@ -27,7 +27,7 @@ export function Library() {
   }
 
   return (
-    <>
+    <section>
       {data.length === 0 ? (
         <p className="font-medium text-lg text-white text-center mt-20">
           Your movie and TV show library is empty...
@@ -69,24 +69,6 @@ export function Library() {
           })}
         </div>
       )}
-    </>
+    </section>
   );
-}
-
-async function fetchLibrary(): Promise<CardInfo[]> {
-  const [movies, tvshows] = await Promise.all([
-    api.get<CardMovieInfo[]>("/movie/searchAllMovies"),
-    api.get<CardTvShowInfo[]>("/tvshow/searchAllTvShows"),
-  ]);
-
-  return [
-    ...movies.data.map((movie) => ({
-      ...movie,
-      type: "movie" as const,
-    })),
-    ...tvshows.data.map((tvshow) => ({
-      ...tvshow,
-      type: "tvshow" as const,
-    })),
-  ];
 }

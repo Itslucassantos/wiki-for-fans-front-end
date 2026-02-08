@@ -40,9 +40,8 @@ export function Card({
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["library"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["library"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
     },
   });
 
@@ -59,9 +58,8 @@ export function Card({
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["library"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["library"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
     },
   });
 

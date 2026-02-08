@@ -4,6 +4,8 @@ import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { Film, Heart, Menu, Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,6 +18,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export function Header() {
+  const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const queryClient = useQueryClient();
@@ -74,23 +77,30 @@ export function Header() {
         >
           <div className="hidden sm:flex justify-center items-center">
             <Film className="h-8 w-8 text-red-600" />
-            <a href="/" className="text-white text-2xl font-bold ml-1">
+            <Link href="/" className="text-white text-2xl font-bold ml-1">
               FanWiki
-            </a>
+            </Link>
           </div>
 
-          <a href="/" className="text-lg font-medium mt-3 sm:mt-0 text-white">
+          <Link
+            href="/"
+            className={`text-lg text-gray-400 transition-all
+              ${pathname === "/" ? "font-bold text-white" : "font-semibold"}
+            `}
+          >
             Home
-          </a>
+          </Link>
 
           <div>
-            <a
-              href="#"
-              className="flex items-center justify-center text-gray-400 hover:text-white"
+            <Link
+              href="/favorites"
+              className={`flex items-center text-gray-400 gap-1 text-lg transition-all
+                ${pathname === "/favorites" ? "font-bold text-white" : "font-semibold"}
+              `}
             >
               <Heart className="h-4 w-4" />
-              <span className="text-lg font-medium ml-1">Favorites</span>
-            </a>
+              <span className="text-lg ml-1">Favorites</span>
+            </Link>
           </div>
         </nav>
 
