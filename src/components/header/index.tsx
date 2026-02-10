@@ -3,7 +3,7 @@
 import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { Film, Heart, Menu, Search } from "lucide-react";
+import { Film, Heart, Loader2, Menu, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -23,7 +23,7 @@ export function Header() {
   const [isSearching, setIsSearching] = useState(false);
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit } = useForm<FormData>({
+  const { register, handleSubmit, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       type: "movie",
@@ -43,6 +43,8 @@ export function Header() {
       queryClient.invalidateQueries({
         queryKey: ["library"],
       });
+
+      reset();
     } catch (error) {
       console.log(error);
     } finally {
@@ -52,12 +54,19 @@ export function Header() {
 
   return (
     <header className="w-full bg-black/95 relative">
-      <div className="h-20 px-4 md:px-6 flex items-center justify-around">
-        <div className="sm:hidden mr-5">
+      <div className="h-20 px-4 md:px-6 flex items-center justify-between sm:justify-center mx-2">
+        <div className="sm:hidden flex items-center justify-between">
           <Menu
-            className="text-white w-6 h-6 cursor-pointer"
+            className="text-white w-8 h-8 cursor-pointer"
             onClick={() => setOpenMenu(!openMenu)}
           />
+        </div>
+
+        <div className="flex sm:hidden">
+          <Film className="h-8 w-8 text-red-600" />
+          <Link href="/" className="text-white text-2xl font-bold ml-1">
+            FanWiki
+          </Link>
         </div>
 
         <nav
@@ -103,37 +112,41 @@ export function Header() {
             </Link>
           </div>
         </nav>
-
-        <form
-          onSubmit={handleSubmit(handleSearchForMovieOrTvshow)}
-          className="flex items-center gap-2 md:ml-4"
-        >
-          <select
-            id="type"
-            {...register("type")}
-            className="text-white text-sm sm:text-base bg-gray-900 border border-gray-700 px-2 rounded focus:bg-gray-800 h-8"
-          >
-            <option value="movie">Movie</option>
-            <option value="tvshow">TV Show</option>
-          </select>
-
-          <input
-            id="search"
-            type="text"
-            placeholder="Search for movies and series..."
-            {...register("search")}
-            className="w-full md:w-64 text-white text-sm sm:text-base outline-none bg-gray-900 border border-gray-700 placeholder:text-gray-400 px-2 rounded h-8"
-          />
-
-          <button
-            type="submit"
-            className="bg-red-600 hover:bg-red-700 cursor-pointer text-white rounded px-3 h-8 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isSearching}
-          >
-            <Search className="h-4 w-4" />
-          </button>
-        </form>
       </div>
+
+      <form
+        onSubmit={handleSubmit(handleSearchForMovieOrTvshow)}
+        className="flex items-center justify-center mx-4"
+      >
+        <select
+          id="type"
+          {...register("type")}
+          className="text-white text-sm sm:text-base bg-gray-900 border border-gray-700 px-2 rounded focus:bg-gray-800 h-8"
+        >
+          <option value="movie">Movie</option>
+          <option value="tvshow">TV Show</option>
+        </select>
+
+        <input
+          id="search"
+          type="text"
+          placeholder="Search for movies and series..."
+          {...register("search")}
+          className="w-64 md:w-92 text-white text-sm sm:text-base outline-none bg-gray-900 border border-gray-700 placeholder:text-gray-400 px-2 rounded h-8 ml-2"
+        />
+
+        <button
+          type="submit"
+          className="bg-red-600 hover:bg-red-700 text-white rounded px-3 h-8 disabled:cursor-not-allowed disabled:opacity-50 ml-1"
+          disabled={isSearching}
+        >
+          {isSearching ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Search className="h-4 w-4" />
+          )}
+        </button>
+      </form>
     </header>
   );
 }

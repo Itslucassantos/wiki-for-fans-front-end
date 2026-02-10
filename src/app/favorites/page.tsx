@@ -45,7 +45,7 @@ export default function Favorites() {
           </h2>
         )}
 
-        <section className="mt-4">
+        <section>
           {data.length === 0 ? (
             <p className="font-medium text-lg text-white text-center mt-20">
               No movies or TV shows on your favorites list...
