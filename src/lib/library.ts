@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { CardInfo, CardMovieInfo, CardTvShowInfo } from "@/types/card";
+import { CardInfo, CardMovieInfo, CardTvShowInfo } from "@/types/card.types";
 
 export async function fetchLibrary(): Promise<CardInfo[]> {
   const [movies, tvshows] = await Promise.all([

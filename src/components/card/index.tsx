@@ -1,7 +1,8 @@
 import { api } from "@/lib/api";
-import { GenreInfo, MediaType } from "@/types/card";
+import { GenreInfo, MediaType } from "@/types/card.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Heart, Star, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 interface CardProps {
   id: number;
@@ -95,7 +96,7 @@ export function Card({
 
       <div className="p-4">
         <h3 className="mb-2 text-white font-semibold cursor-pointer text-xl hover:text-red-500 duration-300">
-          {name}
+          <Link href={`/details/${type}/${id}`}>{name}</Link>
         </h3>
 
         <div className="flex items-center gap-2 text-gray-400 text-xs mb-3">

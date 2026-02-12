@@ -3,7 +3,7 @@ import { Card } from "@/components/card";
 import { Container } from "@/components/container";
 import { Header } from "@/components/header";
 import { fetchFavoriteLibrary } from "@/lib/library";
-import { CardInfo } from "@/types/card";
+import { CardInfo } from "@/types/card.types";
 import { useQuery } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 

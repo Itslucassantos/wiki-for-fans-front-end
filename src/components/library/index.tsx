@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "../card";
-import { CardInfo } from "@/types/card";
+import { CardInfo } from "@/types/card.types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibrary } from "@/lib/library";
 
