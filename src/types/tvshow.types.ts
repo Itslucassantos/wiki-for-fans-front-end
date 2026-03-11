@@ -6,8 +6,8 @@ export interface TvShowInfo {
   name: string;
   originalName: string;
   overview: string;
-  posterImage?: string | null;
-  backdropImage?: string | null;
+  posterImage?: string;
+  backdropImage?: string;
   firstAirDate: string;
   voteAverage: number;
   voteCount: number;

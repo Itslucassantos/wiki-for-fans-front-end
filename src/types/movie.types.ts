@@ -1,9 +1,9 @@
 import { CharacterInfo } from "./character.types";
 
-export interface MovieCardInfo {
+export interface MovieInfo {
   id: number;
-  posterPath: string | null;
-  backdropPath: string | null;
+  posterPath: string;
+  backdropPath: string;
   originalTitle: string;
   voteAverage: number;
   voteCount: number;

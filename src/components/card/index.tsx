@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
-import { GenreInfo, MediaType } from "@/types/card.types";
+import { GenreInfo } from "@/types/card.types";
+import { MediaType } from "@/types/media.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Heart, Star, Trash2 } from "lucide-react";
 import Link from "next/link";

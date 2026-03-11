@@ -24,8 +24,6 @@ export interface CardTvShowInfo {
   genres: GenreInfo[];
 }
 
-export type MediaType = "movie" | "tvshow";
-
 export interface GenreInfo {
   id: number;
   name: string;
