@@ -3,6 +3,7 @@ import { GenreInfo } from "@/types/card.types";
 import { MediaType } from "@/types/media.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Heart, Star, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface CardProps {
@@ -28,6 +29,7 @@ export function Card({
   genres,
   type,
 }: CardProps) {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const toggleFavoriteMutation = useMutation({
@@ -66,7 +68,10 @@ export function Card({
   });
 
   return (
-    <div className="bg-gray-900 rounded-lg group overflow-hidden hover:scale-105 duration-200">
+    <div
+      onClick={() => router.push(`/details/${type}/${id}`)}
+      className="bg-gray-900 rounded-lg group overflow-hidden hover:scale-105 duration-200 cursor-pointer"
+    >
       <div
         className="relative w-full h-100 bg-cover bg-center object-cover overflow-hidden rounded-t-lg hover:cursor-pointer"
         style={{ backgroundImage: `url(${posterImg})` }}
@@ -120,7 +125,10 @@ export function Card({
 
         <div className="w-full flex items-center justify-center gap-2">
           <button
-            onClick={() => toggleFavoriteMutation.mutate(!favorite)}
+            onClick={(event) => {
+              event.stopPropagation();
+              toggleFavoriteMutation.mutate(!favorite);
+            }}
             disabled={toggleFavoriteMutation.isPending}
             className={`${!favorite ? "hover:text-white" : ""} flex flex-1 items-center justify-center hover:bg-red-600 h-8 hover:rounded-lg disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -130,7 +138,10 @@ export function Card({
           </button>
 
           <button
-            onClick={() => handleDeleteMutation.mutate()}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleDeleteMutation.mutate();
+            }}
             disabled={handleDeleteMutation.isPending}
             className="flex flex-1 items-center justify-center hover:bg-red-600 hover:text-white h-8 hover:rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
