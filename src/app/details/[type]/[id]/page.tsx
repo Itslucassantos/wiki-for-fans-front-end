@@ -104,7 +104,7 @@ export default function DetailsClient() {
 
         <button
           onClick={() => router.back()}
-          className="absolute top-4 left-4 z-10 flex items-center gap-2 hover:bg-gray-400 hover:text-black text-white px-3 py-2 rounded-lg transition-colors"
+          className="absolute top-4 left-4 z-10 flex items-center gap-2 hover:bg-white/20 hover:text-black text-white px-3 py-2 rounded-lg transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="text-sm font-medium">Back</span>
@@ -195,7 +195,7 @@ export default function DetailsClient() {
           {data.characters.map((character) => (
             <CharactersCard
               key={character.id}
-              id={character.id}
+              href={`/details/${type}/${id}/character?character=${encodeURIComponent(JSON.stringify(character))}`}
               characterName={character.characterName}
               actorName={character.actorName}
               actorProfileImage={character.actorProfileImage}

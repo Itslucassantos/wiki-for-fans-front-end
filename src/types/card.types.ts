@@ -10,6 +10,7 @@ export interface CardMovieInfo {
   overview: string;
   voteAverage: number;
   posterPath: string;
+  backdropPath?: string;
   genres: GenreInfo[];
 }
 
@@ -21,6 +22,7 @@ export interface CardTvShowInfo {
   overview: string;
   voteAverage: number;
   posterImage: string;
+  backdropImage?: string;
   genres: GenreInfo[];
 }
 

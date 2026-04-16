@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wiki For Fans - Frontend
+
+A modern frontend application to search movies and TV shows, explore details and cast information, and manage favorites.
+
+Built with Next.js App Router, TypeScript, React Query, and Tailwind CSS.
+
+## Features
+
+- Search movies and TV shows from the header search bar
+- View your library on the home page
+- Auto-rotating hero banners (up to 2 movies + 2 TV shows)
+- Open detailed pages for movies and TV shows
+- Toggle favorites for movies
+- Browse favorites on a dedicated page
+- Open cast/character details pages
+- Responsive UI for desktop and mobile
+
+## Tech Stack
+
+- Framework: Next.js 16 (App Router)
+- Language: TypeScript
+- UI: React 19, Tailwind CSS 4, Lucide icons
+- Data Fetching/Cache: @tanstack/react-query
+- Forms and Validation: react-hook-form, zod, @hookform/resolvers
+- HTTP Client: axios
+
+## Project Structure
+
+```text
+src/
+	app/
+		page.tsx                      # Home page
+		favorites/page.tsx            # Favorites page
+		details/[type]/[id]/page.tsx # Movie/TV details
+		details/[type]/[id]/character/page.tsx # Character details
+	components/
+		header/
+		home-banners/
+		library/
+		card/
+		characters-card/
+		container/
+	lib/
+		api.ts
+		library.ts
+		library-detail.ts
+	providers/
+		query-provider.tsx
+	types/
+```
+
+## Prerequisites
+
+- Node.js 18.18+ (recommended: latest LTS)
+- npm, yarn, pnpm, or bun
+- A running backend API compatible with the endpoints used by this app
+
+## Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3333
+```
+
+`NEXT_PUBLIC_API_URL` is used by `axios` in `src/lib/api.ts` as the base URL for all API requests.
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Configure environment variables (`.env.local`).
+
+3. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open the app:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+- `npm run dev`: start development server
+- `npm run build`: create production build
+- `npm run start`: run production server
 
-To learn more about Next.js, take a look at the following resources:
+## Backend Endpoints Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend expects endpoints similar to:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /movie` and `POST /tvshow` for search
+- `GET /movie/searchAllMovies`
+- `GET /tvshow/searchAllTvShows`
+- `GET /movie/searchAllFavorites`
+- `GET /tvshow/searchAllFavorites`
+- `GET /movie/searchMovieById?id=<id>`
+- `GET /tvshow/searchTvShowById?id=<id>`
+- `POST /movie/favorite` and `POST /tvshow/favorite`
 
-## Deploy on Vercel
+Adjust these routes in the frontend if your backend uses different naming.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Images Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+External images are configured in `next.config.ts` to allow:
+
+- `https://image.tmdb.org/t/p/**`
+
+## Notes
+
+- React Query is used to invalidate and refresh library/favorites/details after updates.
+- Character details currently receive payload through URL query params from the details page.
+
+## License
+
+See `LICENSE`.

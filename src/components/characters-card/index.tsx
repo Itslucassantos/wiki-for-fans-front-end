@@ -1,8 +1,8 @@
-import { CharacterInfo } from "@/types/character.types";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CharacterCardProps {
-  id: number;
+  href: string;
   characterName: string;
   actorName: string;
   actorProfileImage?: string | null;
@@ -11,7 +11,7 @@ interface CharacterCardProps {
 }
 
 export function CharactersCard({
-  id,
+  href,
   characterName,
   actorName,
   actorProfileImage,
@@ -19,7 +19,10 @@ export function CharactersCard({
   actorAlsoKnownAs,
 }: CharacterCardProps) {
   return (
-    <div className="bg-gray-900 rounded-lg group overflow-hidden hover:scale-105 duration-200">
+    <Link
+      href={href}
+      className="block bg-gray-900 rounded-lg group overflow-hidden hover:scale-105 duration-200"
+    >
       <div className="relative w-full h-80 bg-cover bg-center object-cover overflow-hidden rounded-t-lg">
         {actorProfileImage ? (
           <Image
@@ -74,6 +77,6 @@ export function CharactersCard({
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
